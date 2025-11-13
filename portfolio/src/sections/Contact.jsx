@@ -1,126 +1,92 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import emailjs from 'emailjs-com';
+import { useRef } from "react";
+import { motion } from "framer-motion";
+import toast, { Toaster } from "react-hot-toast";
+import emailjs from "@emailjs/browser";
 
-// Formulario de contacto conectado a EmailJS con validaciones básicas
 const Contact = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState({ type: 'idle', message: '' });
+  const form = useRef();
 
-  const handleChange = (event) => {
-    setFormData((prev) => ({ ...prev, [event.target.name]: event.target.value }));
-  };
+  const sendEmail = (e) => {
+    e.preventDefault();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (!formData.name || !formData.email || !formData.message) {
-      setStatus({ type: 'error', message: 'Por favor completa todos los campos antes de enviar.' });
-      return;
-    }
-
-    try {
-      setStatus({ type: 'loading', message: 'Enviando mensaje...' });
-      // Estas variables deben configurarse en EmailJS y almacenarse en variables de entorno
-      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-      const userId = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-      if (!serviceId || !templateId || !userId) {
-        throw new Error('Faltan credenciales de EmailJS. Configúralas en el archivo .env local.');
-      }
-
-      await emailjs.send(serviceId, templateId, formData, userId);
-      setStatus({ type: 'success', message: '¡Mensaje enviado! Te responderé muy pronto.' });
-      setFormData({ name: '', email: '', message: '' });
-    } catch (error) {
-      console.error(error);
-      setStatus({
-        type: 'error',
-        message:
-          'No fue posible enviar tu mensaje en este momento. Intenta nuevamente o escríbeme directo a tu.correo@ejemplo.com.'
+    emailjs
+      .sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        form.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      )
+      .then(() => {
+        toast.success("Mensaje enviado correctamente 🎉");
+        form.current.reset();
+      })
+      .catch(() => {
+        toast.error("Hubo un error al enviar el mensaje 😓");
       });
-    }
   };
 
   return (
-    <section id="contacto">
-      <div className="container-section">
-        <motion.div
-          className="glass-panel p-10"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+    <section id="contact" className="w-full py-20 bg-black text-white relative">
+      <Toaster position="top-center" />
+
+      <motion.h2
+        className="text-4xl font-bold text-center mb-10"
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        Contactame
+      </motion.h2>
+
+      <motion.form
+        ref={form}
+        onSubmit={sendEmail}
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-lg mx-auto flex flex-col gap-6 bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800"
+      >
+        <label className="flex flex-col gap-2">
+          <span className="text-gray-300">Tu nombre</span>
+          <input
+            type="text"
+            name="name"
+            placeholder="Juan Pérez"
+            required
+            className="w-full p-3 rounded bg-gray-800 border border-gray-700 text-white focus:border-blue-500 focus:outline-none"
+          />
+        </label>
+
+        <label className="flex flex-col gap-2">
+          <span className="text-gray-300">Tu email</span>
+          <input
+            type="email"
+            name="email"
+            placeholder="tuemail@gmail.com"
+            required
+            className="w-full p-3 rounded bg-gray-800 border border-gray-700 text-white focus:border-blue-500 focus:outline-none"
+          />
+        </label>
+
+        <label className="flex flex-col gap-2">
+          <span className="text-gray-300">Mensaje</span>
+          <textarea
+            name="message"
+            placeholder="Escribí tu mensaje aquí..."
+            required
+            className="w-full p-3 rounded bg-gray-800 border border-gray-700 text-white h-32 focus:border-blue-500 focus:outline-none"
+          />
+        </label>
+
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          type="submit"
+          className="bg-blue-600 hover:bg-blue-700 transition-all py-3 rounded-lg font-bold uppercase tracking-wide"
         >
-          <h2 className="text-3xl font-semibold text-white">Conectemos</h2>
-          <p className="mt-4 max-w-2xl text-slate-300">
-            Cuéntame sobre tu idea, proyecto o posición disponible. Estoy listo para construir experiencias digitales
-            memorables junto a tu equipo.
-          </p>
-          <form className="mt-8 grid gap-6" onSubmit={handleSubmit}>
-            <div className="grid gap-2">
-              <label htmlFor="name" className="text-sm font-medium text-slate-200">
-                Nombre completo
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Ingresa tu nombre"
-                className="rounded-xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-neon-cyan focus:outline-none"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <label htmlFor="email" className="text-sm font-medium text-slate-200">
-                Correo electrónico
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="tu@correo.com"
-                className="rounded-xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-neon-cyan focus:outline-none"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <label htmlFor="message" className="text-sm font-medium text-slate-200">
-                Mensaje
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows="4"
-                value={formData.message}
-                onChange={handleChange}
-                placeholder="Cuéntame sobre tu proyecto..."
-                className="rounded-xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-neon-cyan focus:outline-none"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-neon-cyan to-neon-purple px-6 py-3 text-sm font-semibold text-slate-950 transition hover:scale-[1.02] disabled:opacity-60"
-              style={{ boxShadow: '0 18px 45px rgba(99, 102, 241, 0.28)' }}
-              disabled={status.type === 'loading'}
-            >
-              {status.type === 'loading' ? 'Enviando...' : 'Enviar mensaje'}
-            </button>
-            {status.message && (
-              <p
-                className={`text-sm ${status.type === 'success' ? 'text-emerald-400' : 'text-rose-400'}`}
-              >
-                {status.message}
-              </p>
-            )}
-          </form>
-        </motion.div>
-      </div>
+          Enviar mensaje
+        </motion.button>
+      </motion.form>
     </section>
   );
 };
