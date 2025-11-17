@@ -12,7 +12,7 @@ const Footer = () => {
           ))}
         </div>
         <p>
-          © {new Date().getFullYear()} Tu Nombre. Construido con ❤ utilizando React, Tailwind CSS y Framer Motion.
+          © {new Date().getFullYear()} Facundo Nosa. Realizado con React, Tailwind CSS y Framer Motion.
         </p>
       </div>
     </footer>

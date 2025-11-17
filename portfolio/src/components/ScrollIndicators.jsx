@@ -20,16 +20,20 @@ const ScrollIndicators = () => {
   }, []);
 
   return (
-    <div className="fixed bottom-8 left-1/2 hidden -translate-x-1/2 transform sm:flex items-center gap-3 text-xs uppercase tracking-[0.4em] text-slate-400">
+    <div className="fixed bottom-8 left-1/2 z-40 hidden -translate-x-1/2 items-center gap-3 text-xs uppercase tracking-[0.4em] text-slate-400 sm:flex">
       <span>Desplaza</span>
-      <motion.span
-        className="h-[2px] w-24 bg-slate-700"
-        style={{
-          background: 'linear-gradient(90deg, rgba(34,211,238,0.9), rgba(99,102,241,0.9))'
-        }}
-        initial={{ scaleX: 0, originX: 0 }}
-        animate={{ scaleX: progress }}
-      />
+      <div className="h-[2px] w-24 overflow-hidden rounded-full bg-slate-800/70">
+        <motion.div
+          className="h-full w-full"
+          style={{
+            background:
+              'linear-gradient(90deg, rgba(34,211,238,0.95), rgba(129,140,248,0.95))'
+          }}
+          initial={{ scaleX: 0, originX: 0 }}
+          animate={{ scaleX: progress }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+        />
+      </div>
     </div>
   );
 };

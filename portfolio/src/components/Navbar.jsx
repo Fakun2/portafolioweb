@@ -15,7 +15,7 @@ const Navbar = () => {
     <header className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-2xl border-b border-white/5">
       <div className="container-section flex items-center justify-between py-4">
         <a href="#inicio" className="text-lg font-semibold tracking-tight highlight-text">
-          Tu Nombre · Full Stack Developer
+          Facundo Nosa · Full Stack Developer
         </a>
         <nav className="hidden md:flex items-center gap-10">
           {navigationLinks.map((link) => (

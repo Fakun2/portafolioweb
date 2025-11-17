@@ -28,7 +28,7 @@ function App() {
           <About />
           <Projects />
           <Experience />
-          <Contact /> {/* Ya está correctamente colocado */}
+          <Contact /> 
         </main>
 
         {/* FOOTER */}

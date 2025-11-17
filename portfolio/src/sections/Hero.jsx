@@ -1,102 +1,56 @@
-import { useMemo } from 'react';
-import { motion } from 'framer-motion';
-import Typewriter from '../components/Typewriter.jsx';
-import SocialIcon from '../components/SocialIcon.jsx';
-import { socialLinks } from '../data/navigation.js';
+import { motion } from "framer-motion";
+import facundoImg from "../assets/facundo.png";
 
-// Sección principal con foto, titular y efecto máquina de escribir
 const Hero = () => {
-  const heroPhrases = useMemo(
-    () => [
-      'Construyo interfaces reactivas y accesibles.',
-      'Automatizo procesos con APIs inteligentes.',
-      'Diseño soluciones escalables y seguras.'
-    ],
-    []
-  );
-
   return (
-    <section id="inicio" className="relative overflow-hidden">
-      <div className="container-section grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-        <div className="flex flex-col gap-6">
-          <motion.span
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-900/60 px-4 py-2 text-xs uppercase tracking-[0.3em] text-slate-300"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            Disponible para nuevas oportunidades
-          </motion.span>
-          <motion.h1
-            className="text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            ¡Hola! Soy <span className="highlight-text">Tu Nombre</span>, desarrollador full stack con enfoque en experiencias digitales de alto impacto.
-          </motion.h1>
-          <motion.p
-            className="max-w-2xl text-lg text-slate-300"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.45 }}
-          >
-            Combino un sólido background técnico con sensibilidad por el diseño para crear productos digitales fluidos, accesibles y memorables.
-          </motion.p>
-          <motion.div
-            className="text-xl text-neon-cyan"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            <Typewriter phrases={heroPhrases} />
-          </motion.div>
-          <motion.div
-            className="flex flex-wrap items-center gap-4"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75 }}
-          >
-            <a
-              href="#proyectos"
-              className="rounded-full bg-gradient-to-r from-neon-cyan to-neon-purple px-6 py-3 text-sm font-semibold text-slate-950 transition hover:scale-[1.02]"
-              style={{ boxShadow: '0 18px 45px rgba(99, 102, 241, 0.28)' }}
-            >
-              Ver proyectos
-            </a>
-            <a
-              href="#contacto"
-              className="rounded-full border border-white/10 px-6 py-3 text-sm font-semibold text-slate-200 transition hover:border-neon-cyan hover:text-neon-cyan"
-            >
-              Hablemos
-            </a>
-          </motion.div>
-          <motion.div
-            className="flex items-center gap-3"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.85 }}
-          >
-            {socialLinks.map((link) => (
-              <SocialIcon key={link.label} {...link} />
-            ))}
-          </motion.div>
-        </div>
-        <motion.div
-          className="relative mx-auto flex h-80 w-80 items-center justify-center rounded-full border border-white/10 bg-slate-900/50"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5 }}
-          style={{ boxShadow: '0 35px 90px rgba(168, 85, 247, 0.25)' }}
+    <section
+      id="hero"
+      className="min-h-screen flex flex-col justify-center items-center md:flex-row md:justify-between gap-10 px-6 md:px-16 relative"
+    >
+      {/* Fondo glow */}
+      <div className="absolute inset-0 bg-hero-gradient opacity-40 blur-3xl pointer-events-none"></div>
+
+      {/* Texto */}
+      <motion.div
+        initial={{ opacity: 0, x: -40 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8 }}
+        className="z-10 max-w-xl text-center md:text-left"
+      >
+        <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+          ¡Hola! Soy <span className="text-blue-400">Facundo Nosa</span>
+        </h1>
+        <p className="mt-4 text-lg text-slate-300">
+          Desarrollador Frontend & Tester QA en formación, apasionado por la
+          tecnología, el diseño elegante y la creación de experiencias digitales únicas.
+        </p>
+
+        <a
+          href="#contact"
+          className="inline-block mt-8 bg-blue-600 hover:bg-blue-700 transition-all py-3 px-6 rounded-lg font-bold text-white shadow-lg shadow-blue-500/20"
         >
-          <div className="absolute inset-4 rounded-full bg-gradient-to-br from-neon-cyan/40 via-transparent to-neon-purple/40 blur-3xl" />
+          Contacto
+        </a>
+      </motion.div>
+
+      {/* Imagen con estilo hero */}
+      <motion.div
+        initial={{ opacity: 0, x: 40, scale: 0.9 }}
+        whileInView={{ opacity: 1, x: 0, scale: 1 }}
+        transition={{ duration: 0.8 }}
+        className="z-10"
+      >
+        <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-3xl overflow-hidden shadow-[0_0_30px_5px_rgba(0,150,255,0.3)] bg-slate-900/40 backdrop-blur-xl border border-slate-700/40">
           <img
-            src="https://avatars.dicebear.com/api/initials/Tu%20Nombre.svg"
-            alt="Retrato profesional"
-            className="relative h-60 w-60 rounded-full border-4 border-slate-900 object-cover"
+            src={facundoImg}
+            alt="Facundo Nosa"
+            className="w-full h-full object-cover"
           />
-        </motion.div>
-      </div>
+
+          {/* borde glow */}
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 pointer-events-none"></div>
+        </div>
+      </motion.div>
     </section>
   );
 };
